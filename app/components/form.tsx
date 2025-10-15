@@ -34,7 +34,7 @@ import { type RequestForm, requestFormSchema } from '../types'
 import { toast } from 'sonner'
 import { Input } from './ui/input'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useNavigate } from 'react-router'
+import { redirect, useNavigate } from 'react-router'
 import Tiptap from './TipTap'
 import { Switch } from './ui/switch'
 import data from "../request-info.json"
@@ -80,14 +80,14 @@ export function Form() {
 
                     toast('Sucesso', {
                         description: 'Formulário importado com sucesso!',
-                        invert: true,
+                        invert: false,
                         richColors: true,
                         duration: 2000,
                     })
 
                     toast('Revise o formulário:', {
                         description: 'Preencha uma nova data',
-                        invert: true,
+                        invert: false,
                         richColors: true,
                         icon: <FileWarning className="text-destructive size-4" />,
                         duration: 5000,
@@ -100,7 +100,7 @@ export function Form() {
                 } catch (error) {
                     toast('Erro', {
                         description: 'Arquivo JSON inválido.',
-                        invert: true,
+                        invert: false,
                         richColors: true,
                         duration: 2000,
                         icon: <FileWarning className="text-destructive size-4" />,
@@ -126,7 +126,7 @@ export function Form() {
         URL.revokeObjectURL(url)
         toast('Sucesso', {
             description: 'Formulário exportado com sucesso!',
-            invert: true,
+            invert: false,
             richColors: true,
             duration: 2000,
         })
@@ -231,7 +231,7 @@ export function Form() {
                         Houve algum erro no preenchimento do formulário
                     </p>
                 ),
-                invert: true,
+                invert: false,
                 richColors: true,
                 duration: 2000,
                 icon: <FileWarning className="text-destructive size-4" />,
@@ -249,7 +249,7 @@ export function Form() {
                 description: (
                     <p className="text-wrap overflow-auto">Inclua ao menos uma saída</p>
                 ),
-                invert: true,
+                invert: false,
                 richColors: true,
                 duration: 2000,
                 icon: <FileWarning className="text-destructive size-4" />,
@@ -262,7 +262,7 @@ export function Form() {
                 description: (
                     <p className="text-wrap overflow-auto">Inclua ao menos uma entrada</p>
                 ),
-                invert: true,
+                invert: false,
                 richColors: true,
                 duration: 2000,
                 icon: <FileWarning className="text-destructive size-4" />,
@@ -278,7 +278,7 @@ export function Form() {
                     description: (
                         <p className="text-wrap overflow-auto">{`Inclua ao menos um IED na entrada: ${index + 1}`}</p>
                     ),
-                    invert: true,
+                    invert: false,
                     richColors: true,
                     duration: 2000,
                     icon: <FileWarning className="text-destructive size-4" />,
@@ -296,7 +296,7 @@ export function Form() {
                     description: (
                         <p className="text-wrap overflow-auto">{`Inclua ao menos um IED na saída: ${index + 1}`}</p>
                     ),
-                    invert: true,
+                    invert: false,
                     richColors: true,
                     duration: 2000,
                     icon: <FileWarning className="text-destructive size-4" />,
@@ -312,7 +312,7 @@ export function Form() {
                     description: (
                         <p className="text-wrap overflow-auto">{`Confira os parâmetros na entrada: ${index + 1}`}</p>
                     ),
-                    invert: true,
+                    invert: false,
                     richColors: true,
                     duration: 2000,
                     icon: <FileWarning className="text-destructive size-4" />,
@@ -329,7 +329,7 @@ export function Form() {
                     description: (
                         <p className="text-wrap overflow-auto">{`Confira os parâmetros na saída: ${index + 1}`}</p>
                     ),
-                    invert: true,
+                    invert: false,
                     richColors: true,
                     duration: 2000,
                     icon: <FileWarning className="text-destructive size-4" />,
@@ -342,7 +342,11 @@ export function Form() {
 
         setFormStep(3)
 
-        if (formComplete) navigate('/report', { state: { formData: data } })
+        if (formComplete) {
+            toast('Sucesso')
+            sessionStorage.setItem('formData', JSON.stringify(data));
+            return redirect("/report");
+        }
     }
 
     return (
@@ -452,7 +456,7 @@ export function Form() {
 
                             <div>
                                 <Label className=" text-sm font-medium " htmlFor="client">
-                                    Cliente ou Fábrica
+                                    Nome do Cliente ou da Fábrica
                                 </Label>
                                 <Input
                                     id={`client`}
