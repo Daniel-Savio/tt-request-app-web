@@ -6,9 +6,11 @@ import {
   Scripts,
   ScrollRestoration,
 } from "react-router";
+import { Toaster } from './components/ui/sonner'
 
 import type { Route } from "./+types/root";
 import "./app.css";
+import Logo from '../assets/logo.png'
 
 export const links: Route.LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -32,9 +34,21 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Meta />
         <Links />
       </head>
-      <body>
-        {children}
+      <body className="bg-radial-[at_50%_50%] from-slate-800 to-slate-950 min-h-screen text-slate-50 font-sans">
+
+
+        <main className="mx-auto overflow-y px-4 py-8">
+          {children}
+        </main>
+
+        <footer className='flex flex-col items-center justify-around'>
+          <img src={Logo} className='h-10 w-6 opacity-50' />
+          <p className='text-muted-foreground'>Formulário de requisição para aplicações da linha SD</p>
+        </footer>
+
+
         <ScrollRestoration />
+        <Toaster />
         <Scripts />
       </body>
     </html>

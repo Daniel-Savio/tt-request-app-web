@@ -1,0 +1,87 @@
+/* Basic editor styles */
+.tiptap {
+  :first-child {
+    margin-top: 0;
+  }
+
+  /* List styles */
+  ul,
+  ol {
+    padding: 0 1rem;
+    margin: 1.25rem 1rem 1.25rem 0.4rem;
+  }
+
+  ul > li {
+    position: relative;
+    padding-left: 1.5em;
+  }
+
+  ul > li::before {
+    position: absolute;
+    left: 0;
+    font-weight: bold;
+    color: green;
+    content: "•";
+  }
+
+  ol {
+    counter-reset: list-counter;
+  }
+
+  ol > li {
+    position: relative;
+    padding-left: 1.5em;
+    list-style-type: none;
+    counter-increment: list-counter;
+  }
+
+  ol > li::before {
+    position: absolute;
+    left: 0;
+    font-weight: bold;
+    color: green;
+    content: counter(list-counter) ".";
+  }
+
+  li p {
+    margin-top: 0.25em;
+    margin-bottom: 0.25em;
+  }
+
+  /* Code and preformatted text styles */
+  code {
+    padding: 0.25em 0.3em;
+    font-size: 0.85rem;
+    color: var(--black);
+    background-color: var(--purple-light);
+    border-radius: 0.4rem;
+  }
+
+  pre {
+    padding: 0.75rem 1rem;
+    margin: 1.5rem 0;
+    font-family: "JetBrainsMono", monospace;
+    color: var(--white);
+    background: var(--black);
+    border-radius: 0.5rem;
+
+    code {
+      padding: 0;
+      font-size: 0.8rem;
+      color: inherit;
+      background: none;
+    }
+  }
+
+  blockquote {
+    padding-left: 1rem;
+    margin: 1.5rem 0;
+    border-left: 3px solid var(--gray-3);
+  }
+
+  hr {
+    margin: 2rem 0;
+    border: none;
+    border-top: 1px solid var(--gray-2);
+  }
+}
