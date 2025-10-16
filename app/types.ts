@@ -76,3 +76,6 @@ export const requestFormSchema = z.object({
 })
 
 export type RequestForm = z.infer<typeof requestFormSchema>
+export type Entrada = z.infer<typeof itemSchema>
+export type Saida = z.infer<typeof itemSchema>
+export type IED = NonNullable<z.infer<typeof itemSchema>['ieds']>[number]

@@ -2,6 +2,7 @@ import {
   isRouteErrorResponse,
   Links,
   Meta,
+  NavLink,
   Outlet,
   Scripts,
   ScrollRestoration,
@@ -35,7 +36,12 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Links />
       </head>
       <body className="bg-radial-[at_50%_50%] from-slate-800 to-slate-950 min-h-screen text-slate-50 font-sans">
+        <header className="flex">
+          <NavLink to="/">
 
+            <img src={Logo} className='h-12 w-8' />
+          </NavLink>
+        </header>
 
         <main className="mx-auto overflow-y px-4 py-8">
           {children}

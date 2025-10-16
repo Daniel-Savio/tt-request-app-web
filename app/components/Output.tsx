@@ -31,6 +31,7 @@ export function Output({
     address: string
     modules?: string
     comment?: string
+    manufacturer: string
   }[]
 }) {
   const { control, register, watch, setValue } = useFormContext()

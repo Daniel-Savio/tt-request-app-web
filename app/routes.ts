@@ -4,6 +4,7 @@ export default [
 
     index("routes/home.tsx"),
     route("report", "routes/report.tsx"),
+    route("docs", "routes/docs.tsx"),
 
 
 
