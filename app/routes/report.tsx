@@ -26,6 +26,10 @@ export default function Docs() {
                         <PdfDocument formData={formData} />
                     </PDFViewer>
                 </div>
+
+                <Button>
+                    <Link to="/">Voltar ao formulário</Link>
+                </Button>
             </div>
         </div>
     );

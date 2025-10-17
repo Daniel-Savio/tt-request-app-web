@@ -4,6 +4,9 @@ import logo from '../../assets/logo.png'
 import { base64 } from "zod";
 
 const styles = StyleSheet.create({
+  Text: {
+
+  },
   waterMark: {
     position: 'absolute',
     top: '30%',
@@ -11,7 +14,7 @@ const styles = StyleSheet.create({
     width: 200,
     height: 300,
     zIndex: 1,
-    opacity: 0.25,
+    opacity: 0.15,
     transform: 'translate(-50%, -50%)',
   },
   page: {
@@ -29,10 +32,13 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 18,
     fontWeight: "bold",
+    color: "#008242",
+    marginBottom: 10,
   },
   subtitle: {
     fontSize: 14,
     fontWeight: "bold",
+    color: "#008242",
     marginBottom: 5,
   },
   text: {
@@ -42,11 +48,11 @@ const styles = StyleSheet.create({
   flexContainerRow: {
     flexDirection: "row",
     flexWrap: "wrap",
-    marginBottom: 10,
+    marginBottom: 15,
   },
   flexItem: {
     width: "50%",
-    paddingRight: 10,
+    paddingRight: 15,
   },
   flexItemFull: {
     width: "100%",
@@ -64,6 +70,17 @@ const styles = StyleSheet.create({
     marginBottom: 10, // Some space above content
     borderRadius: 5, // Rounded edges
   },
+  footer: {
+    position: 'absolute',
+    bottom: 10,
+    left: 30,
+    right: 30,
+    textAlign: 'center',
+    color: 'grey',
+    fontSize: 10,
+    flexDirection: 'row',
+    justifyContent: 'space-between'
+  }
 });
 
 interface PdfDocumentProps {
@@ -79,7 +96,7 @@ export function PdfDocument({ formData }: PdfDocumentProps) {
 
   return (
     <Document>
-      <Page size="A4" style={styles.page}>
+      <Page size="A4" style={styles.page} bookmark={"Geral"}>
         <Image src={logo} style={styles.waterMark}></Image>
         <View style={{ flexDirection: 'row', alignItems: 'baseline', marginBottom: 2 }}>
           <Image style={[styles.logo, styles.subtitle]} src={logo}></Image>
@@ -120,20 +137,29 @@ export function PdfDocument({ formData }: PdfDocumentProps) {
         </View>
 
         <View style={styles.section}>
-          <Text style={styles.subtitle}>Comunicação com o Sigma: {formData.sigmaConnection}</Text>
+          <Text style={styles.subtitle}>Comunicação com o Sigma: </Text>
+          <Text style={styles.text}>{formData.sigmaConnection}</Text>
         </View>
 
         <View style={styles.section}>
-          <Text style={styles.subtitle}>Gateway: {formData.gateway}</Text>
+          <Text style={styles.subtitle}>Gateway: </Text>
+          <Text style={styles.text}>{formData.gateway}</Text>
         </View>
 
         <View style={styles.section}>
           <Text style={styles.subtitle}>Comentários</Text>
           <Text> {formData.comments}</Text>
         </View>
+
+        <View style={styles.footer} fixed>
+          <Text>Relatório de Requisição</Text>
+          <Text render={({ pageNumber, totalPages }) => (
+            `Página ${pageNumber} de ${totalPages}`
+          )} />
+        </View>
       </Page>
 
-      <Page size="A4" style={styles.page}>
+      <Page size="A4" style={styles.page} bookmark={"Entradas"}>
         <Image src={logo} style={styles.waterMark}></Image>
         {/* Entradas */}
         <View>
@@ -141,7 +167,7 @@ export function PdfDocument({ formData }: PdfDocumentProps) {
         </View>
         <Text style={[{ fontSize: 12, marginTop: 2, marginBottom: 4 }]}>Aqui estão listados todos os IEDs que serão lidos pelo {formData.gateway} e devem ser mapeados na aplicação de acordo com a paraetrização proposta abaixo: </Text>
         <View style={styles.section}>
-          <Text style={styles.subtitle}>Entradas: {formData.entradas?.length}</Text>
+          <Text style={[styles.subtitle, { marginBottom: 15 }]}>Entradas: {formData.entradas?.length}</Text>
           {formData.entradas?.map((entrada, index) => (
             <View key={index} style={{ marginBottom: 10, padding: 10, border: "1px solid #ccc" }}>
               <Text style={styles.text}>Protocolo: {entrada.protocolo}</Text>
@@ -171,9 +197,15 @@ export function PdfDocument({ formData }: PdfDocumentProps) {
           ))}
         </View>
 
+        <View style={styles.footer} fixed>
+          <Text>Relatório de Requisição</Text>
+          <Text render={({ pageNumber, totalPages }) => (
+            `Página ${pageNumber} de ${totalPages}`
+          )} />
+        </View>
       </Page>
 
-      <Page size="A4" style={styles.page}>
+      <Page size="A4" style={styles.page} bookmark={"Saídas"}>
         <Image src={logo} style={styles.waterMark}></Image>
         {/* Entradas */}
         <View>
@@ -182,7 +214,7 @@ export function PdfDocument({ formData }: PdfDocumentProps) {
         <Text style={[{ fontSize: 12, marginTop: 2, marginBottom: 4 }]}>Aqui estão listados todos os IEDs que serão exportados pelo {formData.gateway} e devem ser mapeados na aplicação de acordo com a paraetrização proposta abaixo nas respectivas saídas: </Text>
 
         <View style={styles.section}>
-          <Text style={styles.subtitle}>Saídas: {formData.saidas?.length}</Text>
+          <Text style={[styles.subtitle, { marginBottom: 15 }]}>Saídas: {formData.saidas?.length}</Text>
           {formData.saidas?.map((saida, index) => (
             <View key={index} style={{ marginBottom: 10, padding: 10, border: "1px solid #ccc" }}>
               <Text style={styles.text}>Protocolo: {saida.protocolo}</Text>
@@ -213,6 +245,12 @@ export function PdfDocument({ formData }: PdfDocumentProps) {
               ))}
             </View>
           ))}
+        </View>
+        <View style={styles.footer} fixed>
+          <Text>Relatório de Requisição</Text>
+          <Text render={({ pageNumber, totalPages }) => (
+            `Página ${pageNumber} de ${totalPages}`
+          )} />
         </View>
       </Page>
     </Document>

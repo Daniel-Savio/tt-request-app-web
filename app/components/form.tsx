@@ -67,11 +67,10 @@ export function Form() {
             );
           });
 
-          toast("Sucesso", {
+          toast.success("Sucesso", {
             description: "Formulário importado com sucesso!",
-            invert: false,
-            richColors: true,
             duration: 2000,
+            position: "top-right",
           });
 
 
@@ -336,7 +335,7 @@ export function Form() {
     formControl.setFormStep(3);
 
     if (formComplete) {
-      toast("Sucesso");
+      toast.success("Formulário preenchido com sucesso!");
       setRequest(data);
       navigate("/report");
 
