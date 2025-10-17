@@ -1,10 +1,11 @@
 import { PDFDownloadLink, PDFViewer } from "@react-pdf/renderer";
 import { Link } from "react-router";
 import { PdfDocument } from "~/pdf/pdf-document";
-import { useRequestInfo } from "~/components/store";
+import { useRequestInfo } from "~/store/useRequest";
 import { Button } from "~/components/ui/button";
 export default function Docs() {
     const formData = useRequestInfo((state) => state.requestInfo);
+    console.log("formData in report route:", formData);
     return (
         <div className="flex flex-col  gap-4 p-4 items-center justify-center">
             <div className="flex flex-col items-center justify-center gap-4">

@@ -30,26 +30,21 @@ import { type RequestForm, requestFormSchema } from "../types";
 import { toast } from "sonner";
 import { Input } from "./ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useRequestInfo } from "./store";
+import { useRequestInfo } from "../store/useRequest";
 import { useNavigate } from "react-router";
 import Tiptap from "./TipTap";
 import { Switch } from "./ui/switch";
 import data from "../request-info.json";
+import { useFormControl } from "~/store/formControl";
+import { Textarea } from "./ui/textarea";
 
 
 
 export function Form() {
-  const [formStep, setFormStep] = useState(0);
   const [numbers, setNumbers] = useState(false);
   const navigate = useNavigate();
+  const formControl = useFormControl();
 
-
-  function nextStep() {
-    setFormStep(formStep + 1);
-  }
-  function previousStep() {
-    setFormStep(formStep - 1);
-  }
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -132,8 +127,8 @@ export function Form() {
     formState: { errors },
   } = requestForm;
 
-
   const allEntradas = watch("entradas");
+  const comments = watch("comments");
   const selectedIedsFromInput = Array.from(
     new Map(
       allEntradas
@@ -200,12 +195,12 @@ export function Form() {
       errors.email ||
       errors.departament
     ) {
-      setFormStep(0);
+      formControl.setFormStep(0);
     }
-    if (errors.entradas) setFormStep(1);
-    if (errors.gateway) setFormStep(1);
-    if (errors.sigmaConnection) setFormStep(2);
-    if (errors.saidas) setFormStep(3);
+    if (errors.entradas) formControl.setFormStep(1);
+    if (errors.gateway) formControl.setFormStep(1);
+    if (errors.sigmaConnection) formControl.setFormStep(2);
+    if (errors.saidas) formControl.setFormStep(3);
 
     if (errors.root) {
       toast("Erro", {
@@ -262,7 +257,7 @@ export function Form() {
         duration: 2000,
         icon: <FileWarning className="text-destructive size-4" />,
       });
-      setFormStep(1);
+      formControl.setFormStep(1);
       return;
     }
 
@@ -280,7 +275,7 @@ export function Form() {
           icon: <FileWarning className="text-destructive size-4" />,
         });
       }
-      setFormStep(1);
+      formControl.setFormStep(1);
       return;
     });
 
@@ -316,7 +311,7 @@ export function Form() {
           icon: <FileWarning className="text-destructive size-4" />,
         });
       }
-      setFormStep(1);
+      formControl.setFormStep(1);
       return;
     });
 
@@ -338,7 +333,7 @@ export function Form() {
       return;
     });
 
-    setFormStep(3);
+    formControl.setFormStep(3);
 
     if (formComplete) {
       toast("Sucesso");
@@ -374,7 +369,7 @@ export function Form() {
 
           <form className="" onSubmit={handleSubmit(postForm)}>
             <section
-              className={` ${formStep === 0 ? "" : "hidden"
+              className={` ${formControl.step === 0 ? "" : "hidden"
                 } p-2 mb-4 rounded flex flex-col gap-4 shadow-md `}
             >
               {/* //Requerente */}
@@ -460,7 +455,7 @@ export function Form() {
 
               <div>
                 <Label className=" text-sm font-medium " htmlFor="client">
-                  Nome do Cliente ou da Fábrica
+                  Nome do Cliente ou da Fábrica ou Interno
                 </Label>
                 <Input
                   id={`client`}
@@ -549,7 +544,7 @@ export function Form() {
 
             {/* STEP 2 */}
             <section
-              className={` ${formStep === 1 ? "" : "hidden"
+              className={` ${formControl.step === 1 ? "" : "hidden"
                 }  p-2 mb-4 rounded gap-4 shadow-md `}
             >
               <div>
@@ -621,7 +616,7 @@ export function Form() {
 
             {/* STEP 3 */}
             <section
-              className={` ${formStep === 2 ? "" : "hidden"
+              className={` ${formControl.step === 2 ? "" : "hidden"
                 }  p-2 mb-4 rounded gap-4 shadow-md `}
             >
               <div>
@@ -665,7 +660,7 @@ export function Form() {
 
             {/* STEP 4 */}
             <section
-              className={` ${formStep === 3 ? "" : "hidden"
+              className={` ${formControl.step === 3 ? "" : "hidden"
                 }  p-2 mb-4 rounded gap-4 shadow-md `}
             >
               <ScrollArea className="max-h-900 mt-4 w-full">
@@ -688,7 +683,7 @@ export function Form() {
                     type="button"
                     variant="default"
                   >
-                    <Plus className="" />
+                    <Plus />
                   </Button>
                 </h1>
 
@@ -703,43 +698,16 @@ export function Form() {
                 ))}
               </ScrollArea>
               <div className="mt-4">
-                <Tiptap name="comments"></Tiptap>
+                <Textarea onChange={(e) => {
+                  setValue("comments", e.target.value);
+                }} />
               </div>
             </section>
 
-
-
             <Separator></Separator>
 
-            {/* Botao */}
-            <div className="w-full flex justify-between items-center mt-2">
-              <Button
-                disabled={formStep === 0}
-                onClick={previousStep}
-                className={` ${formStep === 0 ? "invisible" : ""}`}
-                type="button"
-                variant={"secondary"}
-              >
-                <ChevronLeft />
-                Anterior
-              </Button>
-              <span className="w-full mx-auto text-center text-muted-foreground">
-                {formStep + 1}/4
-              </span>
-              <Button
-                onClick={nextStep}
-                type="button"
-                variant={"secondary"}
-                className={` ${formStep === 3 ? "invisible" : ""}`}
-              >
-                Próximo
-                <ChevronRight />
-              </Button>
-              {/* Send Button */}
-            </div>
-
             <div
-              className={`  mt-8 md:col-span-2 space-y-4  justify-end ${formStep === 3 ? "" : "hidden"
+              className={`  mt-8 md:col-span-2 space-y-4  justify-end ${formControl.step === 3 ? "" : "hidden"
                 }`}
             >
               <Button className="w-full" type="submit">

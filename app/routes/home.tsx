@@ -1,5 +1,5 @@
 import type { Route } from "./+types/home";
-import Logo from '../../assets/logo.png'
+import { useFormControl } from "../store/formControl"
 
 import {
   AlertDialog,
@@ -14,7 +14,7 @@ import {
 } from "../components/ui/alert-dialog"
 import { Button } from "~/components/ui/button";
 import { Form } from "~/components/form";
-import { Plus } from "lucide-react";
+import { ChevronLeft, ChevronRight, Plus, X } from "lucide-react";
 
 export function meta({ }: Route.MetaArgs) {
   return [
@@ -24,6 +24,8 @@ export function meta({ }: Route.MetaArgs) {
 }
 
 export default function Home() {
+
+  const formControl = useFormControl();
   return (
     <>
 
@@ -32,14 +34,46 @@ export default function Home() {
           <AlertDialogTrigger><div className="border-2 cursor-pointer p-8 flex flex-col items-center gap-2 rounded bg-slate-800  text-white hover:bg-slate-700 transition-all">
             <h1> Nova requisição</h1><Plus /></div></AlertDialogTrigger>
           <AlertDialogContent className="w-[95%] md:w-[900px]">
-            <AlertDialogHeader>
-              <AlertDialogTitle>Preencha o formulário</AlertDialogTitle>
+            <AlertDialogHeader className="flex justify-around">
+              <AlertDialogTitle className="w-full flex justify-between">Preencha o formulário  <AlertDialogCancel><X size={12} className="text-destructive" /></AlertDialogCancel></AlertDialogTitle>
+
               <AlertDialogDescription>
                 <Form />
               </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>
-              <AlertDialogCancel>Cancelar</AlertDialogCancel>
+              <Button
+                disabled={formControl.step === 0}
+                onClick={formControl.previous}
+                className={` ${formControl.step === 0 ? "invisible" : ""}`}
+                type="button"
+                variant={"secondary"}
+              >
+                <ChevronLeft />
+                Anterior
+              </Button>
+              <span className="w-full mx-auto text-center text-muted-foreground">
+                {formControl.step + 1}/4
+              </span>
+              <Button
+                onClick={formControl.next}
+                type="button"
+                variant={"secondary"}
+                className={` ${formControl.step === 3 ? "invisible" : ""}`}
+              >
+                Próximo
+                <ChevronRight />
+              </Button>
+              <Button
+                onClick={formControl.end}
+                type="button"
+                variant={"outline"}
+                className={` ${formControl.step === 3 ? "invisible" : ""}`}
+              >
+                Final
+
+              </Button>
+
             </AlertDialogFooter>
           </AlertDialogContent>
         </AlertDialog>

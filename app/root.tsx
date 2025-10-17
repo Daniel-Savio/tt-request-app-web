@@ -50,7 +50,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
           {children}
         </main>
 
-        <footer className='flex flex-col items-center justify-around'>
+        <footer className='flex flex-col items-center justify-around fixed bottom-0 w-full'>
           <img src={Logo} className='h-10 w-6 opacity-50' />
           <p className='text-muted-foreground'>Formulário de requisição para aplicações da linha SD</p>
         </footer>
