@@ -345,7 +345,7 @@ export function Form() {
 
   return (
     <div className="flex flex-col items-center justify-center  text-foreground">
-      <ScrollArea className="w-full h-[800px] p-8 rounded-lg">
+      <div className="w-full p-8 rounded-lg">
         <input
           accept=".json"
           className="hidden"
@@ -372,7 +372,7 @@ export function Form() {
                 } p-2 mb-4 rounded flex flex-col gap-4 shadow-md `}
             >
               {/* //Requerente */}
-              <section className="flex gap-2 justify-between">
+              <section className="flex flex-col md:flex-row gap-2 justify-between">
                 <div>
                   <Label className=" text-sm font-medium ">Requerente</Label>
 
@@ -382,7 +382,7 @@ export function Form() {
                     }}
                     value={watch("requester")}
                   >
-                    <SelectTrigger className="w-96">
+                    <SelectTrigger className="">
                       <SelectValue placeholder="Quem está fazendo a requisição?" />
                     </SelectTrigger>
                     <SelectContent>
@@ -406,7 +406,7 @@ export function Form() {
                   )}
                 </div>
 
-                <div className="flex gap-4 items-center">
+                <div className="flex flex-col md:flex-row gap-4 items-center">
                   <div>
                     <Label className=" text-sm font-medium " htmlFor="email">
                       Email
@@ -703,7 +703,7 @@ export function Form() {
               </div>
             </section>
 
-            <Separator></Separator>
+
 
             <div
               className={`  mt-8 md:col-span-2 space-y-4  justify-end ${formControl.step === 3 ? "" : "hidden"
@@ -732,7 +732,7 @@ export function Form() {
         </FormProvider>
 
 
-      </ScrollArea>
+      </div>
     </div>
   );
 }
