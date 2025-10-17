@@ -26,10 +26,7 @@ export function meta({ }: Route.MetaArgs) {
 export default function Home() {
   return (
     <>
-      <div className='flex  mb-4 items-baseline'>
-        <img src={Logo} className='h-14 w-10' />
-        <h1 className="text-2xl font-bold mb-4 ">Formulário de Requisição</h1>
-      </div>
+
       <section className="w-full flex min-h-[400px]  flex-col items-center justify-center text-center">
         <AlertDialog>
           <AlertDialogTrigger><div className="border-2 cursor-pointer p-8 flex flex-col items-center gap-2 rounded bg-slate-800  text-white hover:bg-slate-700 transition-all">

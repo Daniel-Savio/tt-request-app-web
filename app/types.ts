@@ -67,7 +67,6 @@ export const requestFormSchema = z.object({
     project: z.string().min(3, 'Insira um nome válido'),
     invoiceNumber: z.string().regex(/^\d+$/, 'Insira um número de pedido válido'),
     clientNumber: z.string().regex(/^\d+$/, 'Insira um número de cliente válido'),
-    processingDate: z.date('Selecione uma data válida'),
     gateway: z.string('Escolha o Gateway'),
     entradas: z.array(itemSchema).optional(),
     saidas: z.array(itemSchema, 'Insira ao menos uma saída'),

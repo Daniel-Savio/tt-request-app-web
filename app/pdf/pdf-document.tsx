@@ -1,5 +1,7 @@
-import { Document, Page, StyleSheet, Text, View } from "@react-pdf/renderer";
+import { Document, Page, StyleSheet, Text, View, Image } from "@react-pdf/renderer";
 import type { RequestForm } from "~/types";
+import logo from '../../assets/logo.png'
+import { base64 } from "zod";
 
 const styles = StyleSheet.create({
   page: {
@@ -10,10 +12,14 @@ const styles = StyleSheet.create({
   section: {
     marginBottom: 10,
   },
+  flex: {
+    display: "flex",
+
+  },
   title: {
     fontSize: 18,
     fontWeight: "bold",
-    marginBottom: 10,
+
   },
   subtitle: {
     fontSize: 14,
@@ -33,18 +39,35 @@ const styles = StyleSheet.create({
     width: "50%",
     paddingRight: 10,
   },
+  girdItemFull: {
+    width: "100%",
+  },
+  logo: {
+    width: 40,
+    height: 50,
+    marginRight: 5
+  }
 });
 
 interface PdfDocumentProps {
   formData: RequestForm;
 }
 
+
 export function PdfDocument({ formData }: PdfDocumentProps) {
+
+  if (!formData) {
+    return <Document><Page><Text>Nenhum dado disponível</Text></Page></Document>
+  }
+
   return (
     <Document>
       <Page size="A4" style={styles.page}>
-        <View style={styles.section}>
-          <Text style={styles.title}>Relatório de Requisição</Text>
+        <View style={[styles.grid, { alignItems: 'center' }]}>
+
+          <Image style={[styles.logo, styles.subtitle]} src={logo}></Image>
+          <Text style={[styles.text, styles.title]}>Relatório de Requisição</Text>
+
         </View>
 
         <View style={styles.grid}>
@@ -76,12 +99,7 @@ export function PdfDocument({ formData }: PdfDocumentProps) {
             <Text style={styles.subtitle}>Nº Cliente</Text>
             <Text style={styles.text}>{formData.clientNumber}</Text>
           </View>
-          <View style={styles.gridItem}>
-            <Text style={styles.subtitle}>Data de envio ao processamento</Text>
-            <Text style={styles.text}>
-              {new Date(formData.processingDate).toLocaleDateString()}
-            </Text>
-          </View>
+
         </View>
         <View style={styles.section}>
           <Text style={styles.subtitle}>Comunicação com o Sigma: {formData.sigmaConnection}</Text>
@@ -93,12 +111,12 @@ export function PdfDocument({ formData }: PdfDocumentProps) {
 
         <View style={styles.section}>
           <Text style={styles.subtitle}>Comentários</Text>
-         {formData.comments }
+          {formData.comments}
         </View>
       </Page>
 
       <Page size="A4" style={styles.page}>
-        
+
         <View style={styles.section}>
           <Text style={styles.subtitle}>Entradas: {formData.entradas?.length}</Text>
           {formData.entradas?.map((entrada, index) => (

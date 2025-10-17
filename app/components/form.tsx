@@ -37,11 +37,12 @@ import { Switch } from "./ui/switch";
 import data from "../request-info.json";
 
 
+
 export function Form() {
-  const [open, setOpen] = useState(false);
-  const [date, setDate] = useState<Date | undefined>(undefined);
   const [formStep, setFormStep] = useState(0);
   const [numbers, setNumbers] = useState(false);
+  const navigate = useNavigate();
+
 
   function nextStep() {
     setFormStep(formStep + 1);
@@ -78,18 +79,7 @@ export function Form() {
             duration: 2000,
           });
 
-          toast("Revise o formulário:", {
-            description: "Preencha uma nova data",
-            invert: false,
-            richColors: true,
-            icon: <FileWarning className="text-destructive size-4" />,
-            duration: 5000,
-          });
 
-          requestForm.setError("processingDate", {
-            type: "manual",
-            message: "Preencha uma nova data",
-          });
         } catch (error) {
           toast("Erro", {
             description: "Arquivo JSON inválido.",
@@ -141,6 +131,7 @@ export function Form() {
     control,
     formState: { errors },
   } = requestForm;
+
 
   const allEntradas = watch("entradas");
   const selectedIedsFromInput = Array.from(
@@ -206,7 +197,6 @@ export function Form() {
       errors.invoiceNumber ||
       errors.project ||
       errors.requester ||
-      errors.processingDate ||
       errors.email ||
       errors.departament
     ) {
@@ -241,15 +231,13 @@ export function Form() {
     requester,
   ]);
 
-  
 
-  const navigate = useNavigate();
   const setRequest = useRequestInfo((state) => state.setRequest);
-  const requestInfo = useRequestInfo((state) => state.requestInfo);
+
 
   //Post form
-
   function postForm(data: RequestForm) {
+
     let formComplete = true;
     if (data.entradas?.length !== 0 && data.saidas?.length === 0) {
       toast("Erro", {
@@ -283,9 +271,8 @@ export function Form() {
         formComplete = false;
         toast("Entrada Vazia", {
           description: (
-            <p className="text-wrap overflow-auto">{`Inclua ao menos um IED na entrada: ${
-              index + 1
-            }`}</p>
+            <p className="text-wrap overflow-auto">{`Inclua ao menos um IED na entrada: ${index + 1
+              }`}</p>
           ),
           invert: false,
           richColors: true,
@@ -303,9 +290,8 @@ export function Form() {
         formComplete = false;
         toast("Saída Vazia", {
           description: (
-            <p className="text-wrap overflow-auto">{`Inclua ao menos um IED na saída: ${
-              index + 1
-            }`}</p>
+            <p className="text-wrap overflow-auto">{`Inclua ao menos um IED na saída: ${index + 1
+              }`}</p>
           ),
           invert: false,
           richColors: true,
@@ -321,9 +307,8 @@ export function Form() {
         formComplete = false;
         toast(`Entrada: ${index + 1}`, {
           description: (
-            <p className="text-wrap overflow-auto">{`Confira os parâmetros na entrada: ${
-              index + 1
-            }`}</p>
+            <p className="text-wrap overflow-auto">{`Confira os parâmetros na entrada: ${index + 1
+              }`}</p>
           ),
           invert: false,
           richColors: true,
@@ -340,9 +325,8 @@ export function Form() {
         formComplete = false;
         toast(`Entrada: ${index + 1}`, {
           description: (
-            <p className="text-wrap overflow-auto">{`Confira os parâmetros na saída: ${
-              index + 1
-            }`}</p>
+            <p className="text-wrap overflow-auto">{`Confira os parâmetros na saída: ${index + 1
+              }`}</p>
           ),
           invert: false,
           richColors: true,
@@ -359,9 +343,9 @@ export function Form() {
     if (formComplete) {
       toast("Sucesso");
       setRequest(data);
-      sessionStorage.setItem("formData", JSON.stringify(data));
-   
-      return navigate("/report");
+      navigate("/report");
+
+
     }
   }
 
@@ -387,11 +371,11 @@ export function Form() {
         <Separator className="my-4"></Separator>
 
         <FormProvider {...requestForm}>
+
           <form className="" onSubmit={handleSubmit(postForm)}>
             <section
-              className={` ${
-                formStep === 0 ? "" : "hidden"
-              } p-2 mb-4 rounded flex flex-col gap-4 shadow-md `}
+              className={` ${formStep === 0 ? "" : "hidden"
+                } p-2 mb-4 rounded flex flex-col gap-4 shadow-md `}
             >
               {/* //Requerente */}
               <section className="flex gap-2 justify-between">
@@ -457,6 +441,7 @@ export function Form() {
                       disabled={true}
                       id={`departament`}
                       type="text"
+                      defaultValue={""}
                       {...register("departament")}
                     />
                   </div>
@@ -559,51 +544,13 @@ export function Form() {
                   )}
                 </div>
               </section>
-              <div>
-                <Label className="px-1 w-full" htmlFor="date">
-                  Data de envio ao processamento
-                </Label>
-                <Popover onOpenChange={setOpen} open={open}>
-                  <PopoverTrigger asChild>
-                    <Button
-                      className="w-full mt-1 justify-between font-normal"
-                      id={`date`}
-                      variant="outline"
-                    >
-                      {date ? date.toLocaleDateString() : "Escolha a data"}
-                      <ChevronDownIcon />
-                    </Button>
-                  </PopoverTrigger>
-                  <PopoverContent
-                    align="start"
-                    className="w-auto overflow-hidden p-0"
-                  >
-                    <Calendar
-                      captionLayout="dropdown"
-                      mode="single"
-                      onSelect={(date) => {
-                        setDate(date);
-                        if (date) {
-                          setValue("processingDate", date);
-                        }
-                      }}
-                      selected={date}
-                    />
-                  </PopoverContent>
-                </Popover>
-                {errors.processingDate && (
-                  <p className="mt-2 text-sm text-destructive">
-                    {errors.processingDate.message}
-                  </p>
-                )}
-              </div>
+
             </section>
 
             {/* STEP 2 */}
             <section
-              className={` ${
-                formStep === 1 ? "" : "hidden"
-              }  p-2 mb-4 rounded gap-4 shadow-md `}
+              className={` ${formStep === 1 ? "" : "hidden"
+                }  p-2 mb-4 rounded gap-4 shadow-md `}
             >
               <div>
                 <Label className=" text-sm font-medium ">Gateway</Label>
@@ -674,9 +621,8 @@ export function Form() {
 
             {/* STEP 3 */}
             <section
-              className={` ${
-                formStep === 2 ? "" : "hidden"
-              }  p-2 mb-4 rounded gap-4 shadow-md `}
+              className={` ${formStep === 2 ? "" : "hidden"
+                }  p-2 mb-4 rounded gap-4 shadow-md `}
             >
               <div>
                 <Label
@@ -719,9 +665,8 @@ export function Form() {
 
             {/* STEP 4 */}
             <section
-              className={` ${
-                formStep === 3 ? "" : "hidden"
-              }  p-2 mb-4 rounded gap-4 shadow-md `}
+              className={` ${formStep === 3 ? "" : "hidden"
+                }  p-2 mb-4 rounded gap-4 shadow-md `}
             >
               <ScrollArea className="max-h-900 mt-4 w-full">
                 <h1 className="text-lg font-bold">
@@ -762,6 +707,8 @@ export function Form() {
               </div>
             </section>
 
+
+
             <Separator></Separator>
 
             {/* Botao */}
@@ -792,12 +739,11 @@ export function Form() {
             </div>
 
             <div
-              className={`  mt-8 md:col-span-2 space-y-4  justify-end ${
-                formStep === 3 ? "" : "hidden"
-              }`}
+              className={`  mt-8 md:col-span-2 space-y-4  justify-end ${formStep === 3 ? "" : "hidden"
+                }`}
             >
               <Button className="w-full" type="submit">
-                Revisar PDF
+                Baixar PDF
               </Button>
 
               <Button
@@ -815,7 +761,10 @@ export function Form() {
               )}
             </div>
           </form>
+
         </FormProvider>
+
+
       </ScrollArea>
     </div>
   );

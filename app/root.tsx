@@ -36,11 +36,14 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Links />
       </head>
       <body className="bg-radial-[at_50%_50%] from-slate-800 to-slate-950 min-h-screen text-slate-50 font-sans">
-        <header className="flex">
-          <NavLink to="/">
+        <header className="flex px-4 py-2">
 
-            <img src={Logo} className='h-12 w-8' />
-          </NavLink>
+          <div className='flex  mb-4 items-baseline'>
+            <NavLink to="/">
+              <img src={Logo} className='h-14 w-10' />
+            </NavLink>
+            <h1 className="text-2xl font-bold mb-4 ">Formulário de Requisição</h1>
+          </div>
         </header>
 
         <main className="mx-auto overflow-y px-4 py-8">
